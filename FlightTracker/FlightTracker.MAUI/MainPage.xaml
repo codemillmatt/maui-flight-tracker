@@ -13,9 +13,8 @@
                             IsVisible="true"
                             VerticalOptions="Fill"
                             HorizontalOptions="Fill"
-                            BackgroundColor="Gray" 
-                            Margin="10" />
-        <Button Text="Get Flights" Grid.Row="1" Command="{Binding LoadFlightsCommand}"/>
+                            BackgroundColor="Gray" />
+        <Button Text="Get Flights" Grid.Row="1" Command="{Binding LoadFlightsCommand}" Margin="10"/>
     </Grid>
         
     
