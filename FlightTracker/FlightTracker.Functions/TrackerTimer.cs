@@ -7,11 +7,15 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Newtonsoft.Json;
+using FlightTracker.Models;
 
 namespace FlightTracker.Functions
 {
     public class TrackerTimer
     {
+        static HttpClient client = new HttpClient();
+
         [FunctionName("negotiate")]
         public static SignalRConnectionInfo Negotiate( 
             [HttpTrigger(AuthorizationLevel.Anonymous)] HttpRequest req,
@@ -25,16 +29,14 @@ namespace FlightTracker.Functions
         [SignalR(HubName = "flighttracker")] IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log)
         {
-            var client = new HttpClient();
-
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("https://adsbx-flight-sim-traffic.p.rapidapi.com/api/aircraft/json/lat/47.6205/lon/-122.3493/dist/25/"),
                 Headers =
                 {
-                    {  },
-                    {  },
+                    { "X-RapidAPI-Key", Environment.GetEnvironmentVariable("RapidAPIKey") },
+                    { "X-RapidAPI-Host", Environment.GetEnvironmentVariable("RapidAPIHost")  },
                 },
             };
 
@@ -42,15 +44,14 @@ namespace FlightTracker.Functions
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                log.LogInformation(body);
-                                
+
                 await signalRMessages.AddAsync(
                     new SignalRMessage
                     {
-                        Target = "flightUpdate",
+                        Target = "newMessage",
                         Arguments = new[] { body }
                     });
-            }            
+            }
         }
     }
 }
