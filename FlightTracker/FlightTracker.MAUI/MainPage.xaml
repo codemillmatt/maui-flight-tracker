@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:FlightTracker.MAUI"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             x:DataType="viewModel:MainPageViewModel"
+             x:Class="FlightTracker.MAUI.MainPage"
+             Title="{Binding Title}">
+    
+    <Grid RowDefinitions="*,Auto">
+        <mapsui:MapView x:Name="mapView"                            
+                            Grid.Row ="0"
+                            IsVisible="true"
+                            VerticalOptions="Fill"
+                            HorizontalOptions="Fill"
+                            BackgroundColor="Gray" />
+        <Button Text="Get Flights" Grid.Row="1" Command="{Binding LoadFlightsCommand}" Margin="10"/>
+    </Grid>
+        
+    
+</ContentPage>
+
